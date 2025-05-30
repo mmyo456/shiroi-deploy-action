@@ -171,7 +171,17 @@ jobs:
             workdir=$basedir/${{ github.run_number }}
             mkdir -p $workdir
             mkdir -p $basedir/.cache
+            mkdir -p /tmp/shiro
+            chmod -R u+rwX /tmp/shiro            # 新增：确保 /tmp/shiro 目录有权限
+            echo "当前用户：$(whoami)"            # 新增：调试输出
+            echo "/tmp/shiro 权限如下："
+            ls -ld /tmp/shiro                    # 新增：调试输出
+            echo "/tmp/shiro 内容如下："
+            ls -l /tmp/shiro                     # 新增：调试输出
             mv /tmp/shiro/release.zip $workdir/release.zip
+            chmod u+rw $workdir/release.zip      # 新增：确保 release.zip 可读写
+            echo "$workdir/release.zip 权限如下："
+            ls -l $workdir/release.zip           # 新增：调试输出
             rm -r /tmp/shiro
             cd $workdir
             unzip -qq -o $workdir/release.zip
@@ -233,4 +243,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
-
