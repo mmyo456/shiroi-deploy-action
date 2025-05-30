@@ -165,6 +165,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             set -e
+            export PATH="/www/server/nodejs/v22.16.0/bin:$PATH"
             source $HOME/.bashrc
             basedir=$HOME/shiro
             workdir=$basedir/${{ github.run_number }}
