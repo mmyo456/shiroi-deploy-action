@@ -152,7 +152,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           source: 'release.zip'
-          target: '/tmp/shiro'
+          target: '$HOME/shiro_tmp'
 
       - name: Exec deploy script with SSH
         uses: appleboy/ssh-action@master
@@ -170,18 +170,18 @@ jobs:
             workdir=$basedir/${{ github.run_number }}
             mkdir -p $workdir
             mkdir -p $basedir/.cache
-            mkdir -p /tmp/shiro
-            chmod -R u+rwX /tmp/shiro            # 新增，确保 /tmp/shiro 目录有权限
-            echo "当前用户：$(whoami)"            # 新增调试
-            echo "/tmp/shiro 权限如下："
-            ls -ld /tmp/shiro                    # 新增调试
-            echo "/tmp/shiro 内容如下："
-            ls -l /tmp/shiro                     # 新增调试
-            mv /tmp/shiro/release.zip $workdir/release.zip
-            chmod u+rw $workdir/release.zip      # 新增，确保 zip 有权限
+            mkdir -p $HOME/shiro_tmp
+            chmod -R u+rwX $HOME/shiro_tmp
+            echo "当前用户：$(whoami)"
+            echo "$HOME/shiro_tmp 权限如下："
+            ls -ld $HOME/shiro_tmp
+            echo "$HOME/shiro_tmp 内容如下："
+            ls -l $HOME/shiro_tmp
+            mv $HOME/shiro_tmp/release.zip $workdir/release.zip
+            chmod u+rw $workdir/release.zip
             echo "$workdir/release.zip 权限如下："
-            ls -l $workdir/release.zip           # 新增调试
-            rm -r /tmp/shiro
+            ls -l $workdir/release.zip
+            rm -r $HOME/shiro_tmp
             cd $workdir
             unzip -qq -o $workdir/release.zip
             rm -rf $workdir/standalone/.env
